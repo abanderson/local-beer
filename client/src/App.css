@@ -1,0 +1,42 @@
+.brewery-heading {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.brewery-logo {
+    float: left;
+    border-radius: 10px;
+    margin-right: 1rem;
+}
+
+.brewery-address {
+    clear: none;
+}
+
+.card-image {
+    float: left;
+    border-radius: 10px;
+    margin-right: 1.5rem;
+    max-width: 100px;
+}
+
+.card-description {
+    clear: both;
+}
+
+@media screen and (max-width: 400px) {
+    .brewery-logo {
+        max-width: 75px;
+    }
+}
+
+@media screen and (max-width: 374px) {
+    .brewery-logo {
+        max-width: 75px;
+    }
+
+    .brewery-address {
+        clear: both;
+        margin-top: 2rem;
+    }
+}
