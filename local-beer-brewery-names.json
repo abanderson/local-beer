@@ -38,5 +38,70 @@
         "googleName": "Terrapin Taproom",
         "untappdName": "",
         "address": "755 Battery Ave SE, Atlanta, GA 30339, USA"
+    },
+    {
+        "googleName": "Cutters Pub",
+        "untappdName": "",
+        "address": "120 E Clayton St, Athens, GA 30601, USA"
+    },
+    {
+        "googleName": "Creature Comforts Downtown Taproom and Brewery",
+        "untappdName": "",
+        "address": "271 W Hancock Ave, Athens, GA 30601, USA"
+    },
+    {
+        "googleName": "Creature Comforts Production Facility at Southern Mill",
+        "untappdName": "",
+        "address": "355 Oneta Street Building A100, Athens, GA 30601, United States"
+    },
+    {
+        "googleName": "Akademia Brewing Company",
+        "untappdName": "Akademia Brewing",
+        "address": "150 Crane Dr, Athens, GA 30606, USA"
+    },
+    {
+        "googleName": "Hunter-Gatherer Brewery/Taproom",
+        "untappdName": "",
+        "address": "1402 Jim Hamilton Blvd, Columbia, SC 29205, USA"
+    },
+    {
+        "googleName": "The Casual Pint",
+        "untappdName": "",
+        "address": "807 Gervais St, Columbia, SC 29201, USA"
+    },
+    {
+        "googleName": "Swamp Cabbage Brewery",
+        "untappdName": "Swamp Cabbage Brewing Company",
+        "address": "921 Brookwood Dr, Columbia, SC 29201, USA"
+    },
+    {
+        "googleName": "Granite City Food & Brewery",
+        "untappdName": "",
+        "address": "5270 Utica Ridge Rd, Davenport, IA 52807, USA"
+    },
+    {
+        "googleName": "Front Street Tap Room",
+        "untappdName": "",
+        "address": "421 W River Dr, Davenport, IA 52801, USA"
+    },
+    {
+        "googleName": "The Rock Island Brewing Co.",
+        "untappdName": "",
+        "address": "1815 2nd Ave, Rock Island, IL 61201, USA"
+    },
+    {
+        "googleName": "Sippis American Grill & Craft Beer",
+        "untappdName": "",
+        "address": "406 W 2nd St, Davenport, IA 52801, USA"
+    },
+    {
+        "googleName": "Artisan Grain Distillery",
+        "untappdName": "",
+        "address": "318 E 2nd St, Davenport, IA 52801, USA"
+    },
+    {
+        "googleName": "Brew",
+        "untappdName": "",
+        "address": "1104 Jersey Ridge Rd, Davenport, IA 52803, USA"
     }
 ]
