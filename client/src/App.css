@@ -13,6 +13,10 @@
     clear: none;
 }
 
+.breweries {
+    margin-bottom: 40px;
+}
+
 .card-image {
     float: left;
     border-radius: 10px;
@@ -24,9 +28,54 @@
     clear: both;
 }
 
+.loading {
+    margin-top: 20vh;
+    text-align: center;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    /*background-color: #f5f5f5;*/
+    background-color: white;
+    text-align: center;
+}
+
+.untappd-logo {
+    max-width: 125px;
+}
+
+@media screen and (max-width: 1000px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .card-columns {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
 @media screen and (max-width: 400px) {
     .brewery-logo {
         max-width: 75px;
+    }
+
+    .brewery-address {
+        clear: both;
+        margin-top: 2rem;
+        text-align: center;
     }
 }
 
@@ -38,5 +87,6 @@
     .brewery-address {
         clear: both;
         margin-top: 2rem;
+        text-align: center;
     }
 }
