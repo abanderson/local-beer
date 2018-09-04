@@ -7,9 +7,7 @@ class Search extends Component {
     }
 
     handleSubmit(event) {
-        // this.setState({ searchTerm });
         event.preventDefault();
-        console.log(this.state.searchTerm);
         this.props.onSearchSubmit(this.state.searchTerm);
         this.setState({ searchTerm: "" });
     }
