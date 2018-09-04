@@ -17,7 +17,9 @@ const Brewery = ({ brewery }) => {
                     </h6>
                 </div>
             </div>
-            <div className="row">{beers}</div>
+            <div className="row">
+                <div class="card-columns">{beers}</div>
+            </div>
         </div>
     );
 };
