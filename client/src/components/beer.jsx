@@ -9,7 +9,7 @@ const Beer = ({ beer }) => {
                 <h6 className="card-subtitle mb-2 text-muted">
                     {beer.beer_style}
                 </h6>
-                <img className="card-image" src={beer.beer_label} />
+                <img className="card-image" src={beer.beer_label} alt={`${beer.beer_name} label`} />
                 <p className="card-text">
                     ABV: <span className="text-info">{beer.beer_abv}%</span>
                 </p>
