@@ -10,7 +10,7 @@ const Brewery = ({ brewery }) => {
         <div>
             <div className="row brewery-heading">
                 <div className="col">
-                    <img className="brewery-logo" src={brewery.untappd_label} />
+                    <img className="brewery-logo" src={brewery.untappd_label} alt={`${brewery.name} logo`} />
                     <h3>{brewery.name}</h3>
                     <h6 className="text-muted brewery-address">
                         {brewery.address}
@@ -18,7 +18,7 @@ const Brewery = ({ brewery }) => {
                 </div>
             </div>
             <div className="row">
-                <div class="card-columns">{beers}</div>
+                <div className="card-columns">{beers}</div>
             </div>
         </div>
     );
