@@ -6,6 +6,7 @@ const Footer = () => {
             <img
                 className="untappd-logo"
                 src={require("../img/pbu_40_grey.png")}
+                alt="Powered by Untappd"
             />
         </footer>
     );
