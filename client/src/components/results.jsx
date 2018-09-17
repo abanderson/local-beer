@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Brewery from "./brewery";
 
 const Results = props => {
@@ -10,7 +10,7 @@ const Results = props => {
 
     return (
         <div>
-            {props.loading == true ? (
+            {props.loading === true ? (
                 <div className="loading">
                     <img
                         src={require("../img/loading-beer.gif")}
