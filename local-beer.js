@@ -136,7 +136,6 @@ module.exports.getUntappdBreweryDetails = brewery => {
                 resolve(brewery);
             })
             .catch(error => {
-                console.log(error);
                 reject(`Unable to get brewery details for ${brewery.name}`);
             });
     });
@@ -155,11 +154,8 @@ module.exports.getBeersForBrewery = brewery => {
         axios
             .get(untappdSearchQuery)
             .then(response => {
-                //console.log(`Got data for ${brewery.name}`);
-                //console.log(response.data.response.brewery.beer_list.items);
                 brewery.beers = response.data.response.brewery.beer_list.items.map(
                     item => {
-                        //return item.beer;
                         return {
                             beer_name: item.beer.beer_name,
                             beer_style: item.beer.beer_style,
