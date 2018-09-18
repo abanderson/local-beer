@@ -4,7 +4,7 @@ const axios = require("axios");
 const querystring = require("querystring");
 const localBeer = require("../local-beer.js");
 
-router.get("/search", (req, res) => {
+router.get("/search", (req, res, next) => {
     // Build the Google Places API search query
     let googleSearchQuery = querystring.stringify({
         query: `${req.query.q} breweries`,
@@ -58,16 +58,49 @@ router.get("/search", (req, res) => {
         // Finally, send the brewery and beer list as JSON
         .then(breweries => res.json(breweries))
         .catch(error => {
-            console.log(error);
-            res.json({
-                status: "error",
-                message: "Failed to retrieve brewery data."
-            });
+            //console.log(error);
+            next(error);
+            //res.status(500).send("Error");
+            // res.json({
+            //     status: "error",
+            //     message: "Failed to retrieve brewery data."
+            // });
         });
 });
 
-router.get("/demo", (req, res) => {
-    res.json(demo.demoData);
+router.get("/geosearch", (req, res, next) => {
+    // Build the Google Geocode search query
+    let googleSearchQuery = querystring.stringify({
+        latlng: `${req.query.lat},${req.query.lng}`,
+        key: process.env.GOOGLE_API_KEY
+    });
+    googleSearchQuery =
+        "https://maps.googleapis.com/maps/api/geocode/json?" +
+        googleSearchQuery;
+
+    axios
+        .get(googleSearchQuery)
+        .then(response => {
+            let location = [];
+            response.data.results.forEach(result => {
+                result.address_components.forEach(component => {
+                    if (component.types.includes("locality")) {
+                        location.push(component);
+                    }
+                });
+            });
+            if (location.length > 0) {
+                res.json(location[0].long_name);
+            } else res.json([]);
+        })
+        .catch(error => {
+            //console.log(error);
+            next(error);
+            // res.json({
+            //     status: "error",
+            //     message: "Failed to get location from coordinates"
+            // });
+        });
 });
 
 module.exports = router;
