@@ -1,15 +1,33 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Search extends Component {
     constructor(props) {
         super(props);
-        this.state = { searchTerm: "" };
+        this.state = {
+            searchTerm: "",
+            latitude: "",
+            longitude: ""
+        };
     }
 
     handleSubmit(event) {
         event.preventDefault();
         this.props.onSearchSubmit(this.state.searchTerm);
         this.setState({ searchTerm: "" });
+    }
+
+    handleLocationButtonClick() {
+        navigator.geolocation.getCurrentPosition(position => {
+            this.setState({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            });
+            this.props.onLocationUpdate(
+                this.state.latitude,
+                this.state.longitude
+            );
+        });
     }
 
     onInputChange(searchTerm) {
@@ -41,6 +59,15 @@ class Search extends Component {
                                     id="button-addon2"
                                 >
                                     Search
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary"
+                                    onClick={this.handleLocationButtonClick.bind(
+                                        this
+                                    )}
+                                >
+                                    <FontAwesomeIcon icon="location-arrow" />
                                 </button>
                             </div>
                         </div>

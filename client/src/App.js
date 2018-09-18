@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { library } from "@fortawesome/fontawesome-svg-core";
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import "./App.css";
 import Navbar from "./components/navbar";
@@ -6,21 +9,49 @@ import Search from "./components/search";
 import Results from "./components/results";
 import Footer from "./components/footer";
 
+library.add(fas);
+
 class App extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             breweries: [],
-            loading: false
+            loading: false,
+            status: null
         };
     }
 
     beerSearch(searchTerm) {
-        this.setState({ breweries: [], loading: true });
-        Axios.get(`/api/search?q=${searchTerm}`).then(response => {
-            this.setState({ breweries: response.data, loading: false });
-        });
+        this.setState({ breweries: [], loading: true, status: null });
+        Axios.get(`/api/search?q=${searchTerm}`)
+            .then(response => {
+                if (response.data.length === 0) {
+                    this.setState({
+                        loading: false,
+                        status: `No breweries found near ${searchTerm}`
+                    });
+                } else {
+                    this.setState({ breweries: response.data, loading: false });
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    breweries: [],
+                    loading: false,
+                    status:
+                        "Something went wrong! Most likely, the number of requests for Untappd data has exceeded their hourly limit. Please try again in a little while."
+                });
+            });
+    }
+
+    locationSearch(latitude, longitude) {
+        this.setState({ loading: true });
+        Axios.get(`/api/geosearch?lat=${latitude}&lng=${longitude}`).then(
+            response => {
+                this.beerSearch(response.data);
+            }
+        );
     }
 
     render() {
@@ -28,10 +59,14 @@ class App extends Component {
             <div className="App">
                 <Navbar />
                 <div className="container">
-                    <Search onSearchSubmit={this.beerSearch.bind(this)} />
+                    <Search
+                        onSearchSubmit={this.beerSearch.bind(this)}
+                        onLocationUpdate={this.locationSearch.bind(this)}
+                    />
                     <Results
                         breweries={this.state.breweries}
                         loading={this.state.loading}
+                        status={this.state.status}
                     />
                 </div>
             </div>
