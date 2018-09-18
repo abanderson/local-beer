@@ -7,24 +7,26 @@ const Results = props => {
     });
 
     // return <div>{breweries}</div>;
+    let resultsContent;
+    if (props.loading === true) {
+        resultsContent = (
+            <div className="loading">
+                <img
+                    src={require("../img/loading-beer.gif")}
+                    width="50"
+                    height="50"
+                    alt="Animated beer"
+                />
+                <h5>Loading...</h5>
+            </div>
+        );
+    } else if (props.loading === false && props.status) {
+        resultsContent = <div className="status-message">{props.status}</div>;
+    } else {
+        resultsContent = <div className="breweries">{breweries}</div>;
+    }
 
-    return (
-        <div>
-            {props.loading === true ? (
-                <div className="loading">
-                    <img
-                        src={require("../img/loading-beer.gif")}
-                        width="50"
-                        height="50"
-                        alt="Animated beer"
-                    />
-                    <h5>Loading...</h5>
-                </div>
-            ) : (
-                <div className="breweries">{breweries}</div>
-            )}
-        </div>
-    );
+    return <div>{resultsContent}</div>;
 };
 
 export default Results;
