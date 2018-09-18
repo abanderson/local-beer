@@ -33,6 +33,13 @@
     text-align: center;
 }
 
+.status-message {
+    margin: 15vh auto 0 auto;
+    text-align: center;
+    size: 1.5rem;
+    width: 80%;
+}
+
 .footer {
     position: fixed;
     bottom: 0;
