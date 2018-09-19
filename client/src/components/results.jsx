@@ -22,6 +22,20 @@ const Results = props => {
         );
     } else if (props.loading === false && props.status) {
         resultsContent = <div className="status-message">{props.status}</div>;
+    } else if (
+        props.loading === false &&
+        !props.status &&
+        breweries.length === 0
+    ) {
+        resultsContent = (
+            <div className="untappd-logo">
+                <img
+                    className="untappd-logo"
+                    src={require("../img/pbu_40_grey.png")}
+                    alt="Powered by Untappd"
+                />
+            </div>
+        );
     } else {
         resultsContent = <div className="breweries">{breweries}</div>;
     }
