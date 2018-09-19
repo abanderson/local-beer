@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import "./App.css";
 import Navbar from "./components/navbar";
 import Search from "./components/search";
 import Results from "./components/results";
-import Footer from "./components/footer";
 
 library.add(fas);
 
@@ -24,7 +22,8 @@ class App extends Component {
 
     beerSearch(searchTerm) {
         this.setState({ breweries: [], loading: true, status: null });
-        Axios.get(`/api/search?q=${searchTerm}`)
+        let formattedSearchTerm = searchTerm.toLowerCase().trim();
+        Axios.get(`/api/search?q=${formattedSearchTerm}`)
             .then(response => {
                 if (response.data.length === 0) {
                     this.setState({
@@ -36,6 +35,7 @@ class App extends Component {
                 }
             })
             .catch(error => {
+                console.error(error);
                 this.setState({
                     breweries: [],
                     loading: false,
