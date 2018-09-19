@@ -116,7 +116,7 @@
     },
     {
         "googleName": "Zhang Men craft Brewery",
-        "untappdName": "",
+        "untappdName": "Zhang Men Brewing",
         "address": "No. 4-6, Lane 4, Yongkang Street, Da’an District, Taipei City, Taiwan 106"
     },
     {
@@ -283,5 +283,75 @@
         "googleName": "Desert Edge Brewery at The Pub",
         "untappdName": "",
         "address": "273 Trolley Square, Salt Lake City, UT 84102, USA"
+    },
+    {
+        "googleName": "RISE & WIN Brewing Co. KAMIKATZ TAPROOM",
+        "untappdName": "",
+        "address": "Japan, 〒106-0044 Tokyo, Minato, Higashiazabu, １丁目4−2 THE WORKERS & CO"
+    },
+    {
+        "googleName": "Craftheads",
+        "untappdName": "",
+        "address": "1 Chome-13-10B1F Jinnan, Shibuya, Tokyo 150-0041, Japan"
+    },
+    {
+        "googleName": "Hitachino Brewing Lab Tokyo Station",
+        "untappdName": "",
+        "address": "1 Chome−9−9−1 駅 グラン ルーフ 2F, Tōkyō-to, Japan"
+    },
+    {
+        "googleName": "Baird Beer Taproom Harajuku",
+        "untappdName": "",
+        "address": "1 Chome-20-13 Jingumae, Shibuya, Tokyo 150-0001, Japan"
+    },
+    {
+        "googleName": "Asahi Beer Headquarters",
+        "untappdName": "",
+        "address": "１丁目-23-1 Azumabashi, Sumida, Tokyo 130-0001, Japan"
+    },
+    {
+        "googleName": "籠屋ブルワリー",
+        "untappdName": "",
+        "address": "3 Chome-34-３ Komaimachi, Komae, Tokyo 201-0016, Japan"
+    },
+    {
+        "googleName": "ØL by Oslo Brewing Co.",
+        "untappdName": "",
+        "address": "Japan, 〒150-0042 Tokyo, Shibuya, Udagawacho, 37−10 麻仁ビル"
+    },
+    {
+        "googleName": "Hakutsuru Sake Brewing",
+        "untappdName": "",
+        "address": "Japan, 〒104-0061 Tokyo, 中央区銀座５丁目１２−５ 白鶴ビルディング 7F"
+    },
+    {
+        "googleName": "Y.Y.G. Brewery & Beer Kitchen",
+        "untappdName": "",
+        "address": "Japan, 〒151-0053 Tokyo, Shibuya, Yoyogi, 2 Chome−18−３ オーチュー第1ビル 1F&7F"
+    },
+    {
+        "googleName": "Watering Hole",
+        "untappdName": "",
+        "address": "Japan, 〒151-0051 Tokyo, 渋谷区Sendagaya, 5 Chome−26−5 代々木シティホームズ"
+    },
+    {
+        "googleName": "Hitachino Brewing Lab Tokyo",
+        "untappdName": "",
+        "address": "Japan, 〒100-0005 Tokyo, Chiyoda, Marunouchi, 1 Chome−9-1 東京駅グランルーフ"
+    },
+    {
+        "googleName": "SPRING VALLEY BREWERY TOKYO",
+        "untappdName": "",
+        "address": "Japan, 〒150-0034 Tokyo, Shibuya, Daikanyamacho, 13−1 ログロード代官山内"
+    },
+    {
+        "googleName": "Distant Shores Brewing Co., Ltd.",
+        "untappdName": "",
+        "address": "3 Chome-14-2 Akitsucho, Higashimurayama, Tokyo 189-0001, Japan"
+    },
+    {
+        "googleName": "Ottotto Brewery Hamamatsucho",
+        "untappdName": "",
+        "address": "Japan, 〒105-0013 Tokyo, Minato, 浜松町２丁目１−５ クレトイシビル B1"
     }
 ]
