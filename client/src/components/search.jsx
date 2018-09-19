@@ -13,6 +13,7 @@ class Search extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        document.getElementsByClassName("form-control")[0].blur(); // Remove focus from the search field (hides keyboard on iOS)
         this.props.onSearchSubmit(this.state.searchTerm);
         this.setState({ searchTerm: "" });
     }
