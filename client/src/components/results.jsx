@@ -6,7 +6,6 @@ const Results = props => {
         return <Brewery key={index} brewery={brewery} />;
     });
 
-    // return <div>{breweries}</div>;
     let resultsContent;
     if (props.loading === true) {
         resultsContent = (
