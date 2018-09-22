@@ -353,5 +353,80 @@
         "googleName": "Ottotto Brewery Hamamatsucho",
         "untappdName": "",
         "address": "Japan, 〒105-0013 Tokyo, Minato, 浜松町２丁目１−５ クレトイシビル B1"
+    },
+    {
+        "googleName": "Old Sugar Distillery",
+        "untappdName": "",
+        "address": "931 E Main St #8, Madison, WI 53703, USA"
+    },
+    {
+        "googleName": "Great Dane Pub & Brewing Co. - Hilldale",
+        "untappdName": "",
+        "address": "357 Price Pl, Madison, WI 53705, USA"
+    },
+    {
+        "googleName": "The Great Dane Pub & Brewing Co. (Eastside)",
+        "untappdName": "",
+        "address": "876 Jupiter Dr, Madison, WI 53718, USA"
+    },
+    {
+        "googleName": "Great Dane Pub & Brewing Co. - Fitchburg",
+        "untappdName": "",
+        "address": "2980 Cahill Main, Fitchburg, WI 53711, USA"
+    },
+    {
+        "googleName": "Yahara Bay Distillers Inc",
+        "untappdName": "",
+        "address": "6250 Nesbitt Rd #200, Madison, WI 53719, USA"
+    },
+    {
+        "googleName": "Vintage Brewing Co. Madison",
+        "untappdName": "",
+        "address": "674 S Whitney Way, Madison, WI 53711, USA"
+    },
+    {
+        "googleName": "Melvin Brewing Bellingham",
+        "untappdName": "",
+        "address": "2416 Meridian St, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Boundary Bay Brewery & Bistro",
+        "untappdName": "",
+        "address": "1107 Railroad Ave, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Elizabeth Station",
+        "untappdName": "",
+        "address": "1400 W Holly St, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Hops N Headz",
+        "untappdName": "",
+        "address": "3207 Northwest Ave, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Chuckanut Brewery & Kitchen",
+        "untappdName": "",
+        "address": "601 W Holly St, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Schweinhaus Biergarten",
+        "untappdName": "",
+        "address": "1330 N State St, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "The Local Public House",
+        "untappdName": "",
+        "address": "1427 Railroad Ave, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "McKay's Taphouse",
+        "untappdName": "",
+        "address": "1118 E Maple St, Bellingham, WA 98225, USA"
+    },
+    {
+        "googleName": "Culture Cafe at Kombucha Town",
+        "untappdName": "",
+        "address": "210 E Chestnut St, Bellingham, WA 98225, USA"
     }
 ]
