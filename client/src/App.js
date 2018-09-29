@@ -5,6 +5,7 @@ import Axios from "axios";
 import "./App.css";
 import Navbar from "./components/navbar";
 import Search from "./components/search";
+import Filter from "./components/filter";
 import Results from "./components/results";
 
 library.add(fas);
@@ -15,13 +16,19 @@ class App extends Component {
 
         this.state = {
             breweries: [],
+            displayedBreweries: [],
             loading: false,
             status: null
         };
     }
 
     beerSearch(searchTerm) {
-        this.setState({ breweries: [], loading: true, status: null });
+        this.setState({
+            breweries: [],
+            displayedBreweries: [],
+            loading: true,
+            status: null
+        });
         let formattedSearchTerm = searchTerm.toLowerCase().trim();
         Axios.get(`/api/search?q=${formattedSearchTerm}`)
             .then(response => {
@@ -31,7 +38,11 @@ class App extends Component {
                         status: `No breweries found near ${searchTerm}`
                     });
                 } else {
-                    this.setState({ breweries: response.data, loading: false });
+                    this.setState({
+                        breweries: response.data,
+                        displayedBreweries: response.data,
+                        loading: false
+                    });
                 }
             })
             .catch(error => {
@@ -43,6 +54,36 @@ class App extends Component {
                         "Something went wrong! Most likely, the number of requests for Untappd data has exceeded their hourly limit. Please try again in a little while."
                 });
             });
+    }
+
+    filterResults(filterString) {
+        let lowerCaseFilterString = filterString.toLowerCase();
+
+        let filteredResults = this.state.breweries.map(brewery => {
+            let breweryCopy = { ...brewery };
+            breweryCopy.beers = breweryCopy.beers.filter(beer => {
+                return (
+                    String(beer.beer_abv).includes(lowerCaseFilterString) ||
+                    beer.beer_description
+                        .toLowerCase()
+                        .includes(lowerCaseFilterString) ||
+                    String(beer.beer_ibu).includes(lowerCaseFilterString) ||
+                    beer.beer_name
+                        .toLowerCase()
+                        .includes(lowerCaseFilterString) ||
+                    beer.beer_style
+                        .toLowerCase()
+                        .includes(lowerCaseFilterString)
+                );
+            });
+            return breweryCopy;
+        });
+
+        filteredResults = filteredResults.filter(brewery => {
+            return brewery.beers.length > 0;
+        });
+
+        this.setState({ displayedBreweries: filteredResults });
     }
 
     locationSearch(latitude, longitude) {
@@ -63,8 +104,18 @@ class App extends Component {
                         onSearchSubmit={this.beerSearch.bind(this)}
                         onLocationUpdate={this.locationSearch.bind(this)}
                     />
+                    {this.state.breweries.length > 0 &&
+                    !this.state.loading &&
+                    !this.state.status ? (
+                        <Filter
+                            onResultsFilter={this.filterResults.bind(this)}
+                        />
+                    ) : (
+                        <div />
+                    )}
+
                     <Results
-                        breweries={this.state.breweries}
+                        breweries={this.state.displayedBreweries}
                         loading={this.state.loading}
                         status={this.state.status}
                     />
