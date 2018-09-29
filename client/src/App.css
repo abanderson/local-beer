@@ -33,6 +33,75 @@
     clear: both;
 }
 
+.filter-caret {
+    display: inline;
+    margin-left: 0.25rem;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.filter-label {
+    display: inline;
+    vertical-align: middle;
+    line-height: 1px;
+}
+
+.filter-toggle {
+    width: 100px;
+    margin: 0 auto;
+    border: 1px solid #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.filter-container {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin: 10px auto;
+    overflow: auto;
+    max-height: 0px;
+}
+
+.filter-container-open {
+    animation-name: filter-container-open-animation;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.filter-container-close {
+    animation-name: filter-container-close-animation;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.filter-controls {
+    /*width: 50%;*/
+    padding: 0 1rem;
+    text-align: center;
+    margin: 10px auto;
+}
+
+.filter-controls-open {
+    animation-name: filter-controls-open-animation;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.filter-controls-close {
+    animation-name: filter-controls-close-animation;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.filter-input-field {
+    /*width: 100%;*/
+}
+
 .loading {
     margin-top: 20vh;
     text-align: center;
@@ -50,6 +119,42 @@
     text-align: center;
     margin-top: 10vh;
     opacity: 0.7;
+}
+
+@keyframes filter-container-open-animation {
+    from {
+        max-height: 0px;
+    }
+    to {
+        max-height: 500px;
+    }
+}
+
+@keyframes filter-container-close-animation {
+    from {
+        max-height: 500px;
+    }
+    to {
+        max-height: 0px;
+    }
+}
+
+@keyframes filter-controls-open-animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100;
+    }
+}
+
+@keyframes filter-controls-close-animation {
+    from {
+        opacity: 100;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 @media screen and (max-width: 1200px) {
