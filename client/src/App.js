@@ -73,6 +73,12 @@ class App extends Component {
                         .includes(lowerCaseFilterString) ||
                     beer.beer_style
                         .toLowerCase()
+                        .includes(lowerCaseFilterString) ||
+                    beer.brewery
+                        .toLowerCase()
+                        .includes(lowerCaseFilterString) ||
+                    beer.brewery_address
+                        .toLowerCase()
                         .includes(lowerCaseFilterString)
                 );
             });
