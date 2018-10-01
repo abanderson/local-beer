@@ -58,13 +58,8 @@ router.get("/search", (req, res, next) => {
         // Finally, send the brewery and beer list as JSON
         .then(breweries => res.json(breweries))
         .catch(error => {
-            //console.log(error);
+            console.error(error);
             next(error);
-            //res.status(500).send("Error");
-            // res.json({
-            //     status: "error",
-            //     message: "Failed to retrieve brewery data."
-            // });
         });
 });
 
@@ -94,12 +89,8 @@ router.get("/geosearch", (req, res, next) => {
             } else res.json([]);
         })
         .catch(error => {
-            //console.log(error);
+            console.error(error);
             next(error);
-            // res.json({
-            //     status: "error",
-            //     message: "Failed to get location from coordinates"
-            // });
         });
 });
 
