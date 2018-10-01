@@ -178,7 +178,9 @@ module.exports.getBeersForBrewery = brewery => {
                             }/${item.beer.bid}`,
                             untappd_rating: item.beer.rating_score,
                             untappd_rating_count: item.beer.rating_count,
-                            is_in_production: item.beer.is_in_production
+                            is_in_production: item.beer.is_in_production,
+                            brewery: brewery.name,
+                            brewery_address: brewery.address
                         };
                     }
                 );
