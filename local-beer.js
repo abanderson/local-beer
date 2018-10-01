@@ -1,68 +1,74 @@
 const fs = require("fs");
 const querystring = require("querystring");
 const axios = require("axios");
+const models = require("./models");
 
 let breweryNames;
 
-fs.readFile("local-beer-brewery-names.json", (err, data) => {
-    if (err) throw err;
-    breweryNames = JSON.parse(data);
-});
-
-function addBreweryToCorrectionList(brewery) {
-    // Search the breweryNames (correction list) object to see if
-    // there is an entry for the brewery passed to the function...
-    let breweryNameSearchResults = breweryNames.find(item => {
-        return (
-            item.googleName === brewery.name ||
-            item.untappdName === brewery.name
-        );
-    });
-
-    // If the brewery is not in the list, add it, log the addition
-    // to the console and save it to the JSON file
-    if (breweryNameSearchResults === undefined) {
-        breweryNames.push({
-            googleName: brewery.name,
-            untappdName: "",
-            address: brewery.address
-        });
-        fs.writeFile(
-            "local-beer-brewery-names.json",
-            JSON.stringify(breweryNames, 0, 4),
-            err => {
-                if (err) throw err;
+function addBreweryToCorrectionDB(brewery) {
+    // Search the database to see if there is an entry for the brewery
+    // passed to the function. If the brewery is not in the database,
+    // add it and log the addition to the console.
+    models.Place.findOrCreate({
+        where: { googleName: brewery.name, address: brewery.address }
+    })
+        .spread((place, created) => {
+            if (created) {
                 console.log(
-                    `Brewery correction list (local-beer-brewery-name.json) updated with "${
-                        brewery.name
-                    }"`
+                    `Brewery correction database updated with "${brewery.name}"`
                 );
+                // models.Place.update(
+                //     { address: brewery.address },
+                //     { where: { googleName: brewery.name } }
+                // )
+                //     .then(rowsUpdated => {
+                //         console.log(rowsUpdated);
+                //         console.log(
+                //             `Address added to "${brewery.name}" database entry`
+                //         );
+                //     })
+                //     .catch(error => {
+                //         console.error(error);
+                //     });
             }
-        );
-    }
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
-function getCorrectBreweryName(brewery) {
-    // module.exports.getCorrectBreweryName = brewery => {
-    // Search the breweryNames (correction list) object to see if
-    // there is an entry for the brewery passed to the function as well as
-    // a corrected name for BeerAdvocate...
-    let correctBreweryNameObject = breweryNames.find(item => {
-        return item.googleName === brewery.name && item.untappdName != "";
-    });
-
+function getBreweryNameFromCorrectionDB(brewery) {
+    // Search the database to see if there is an entry for the brewery
+    // passed to the function as well as a corrected name for BeerAdvocate.
     // If there is, log the correction to the console and return the correct name,
-    // otherwise return the original name
-    if (correctBreweryNameObject != undefined) {
-        console.log(
-            `Correction found for brewery name: "${brewery.name}" --> "${
-                correctBreweryNameObject.untappdName
-            }"`
-        );
-        return correctBreweryNameObject.untappdName;
-    } else {
-        return brewery.name;
-    }
+    // otherwise return the original name.
+    return new Promise((resolve, reject) => {
+        models.Place.findOne({
+            where: {
+                googleName: brewery.name,
+                untappdName: { $ne: null },
+                address: brewery.address
+            }
+        })
+            .then(result => {
+                if (result) {
+                    console.log(
+                        `Correction found for brewery name: "${
+                            brewery.name
+                        }" --> "${result.untappdName}"`
+                    );
+                    resolve(result.untappdName);
+                } else {
+                    resolve(brewery.name);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                reject(
+                    `Error querying correction database for "${brewery.name}"`
+                );
+            });
+    });
 }
 
 function getDistanceBetweenBreweryCoordinates(lat1, lon1, lat2, lon2) {
@@ -84,21 +90,23 @@ function getDistanceBetweenBreweryCoordinates(lat1, lon1, lat2, lon2) {
 
 module.exports.getUntappdBreweryDetails = brewery => {
     return new Promise((resolve, reject) => {
-        brewery.untappdName = getCorrectBreweryName(brewery);
+        getBreweryNameFromCorrectionDB(brewery)
+            .then(untappdName => {
+                brewery.untappdName = untappdName;
 
-        let untappdSearchQuery = querystring.stringify({
-            q: brewery.untappdName,
-            client_id: process.env.UNTAPPD_CLIENT_ID,
-            client_secret: process.env.UNTAPPD_CLIENT_SECRET
-        });
-        untappdSearchQuery =
-            "https://api.untappd.com/v4/search/brewery?" + untappdSearchQuery;
+                let untappdSearchQuery = querystring.stringify({
+                    q: untappdName,
+                    client_id: process.env.UNTAPPD_CLIENT_ID,
+                    client_secret: process.env.UNTAPPD_CLIENT_SECRET
+                });
 
-        axios
-            .get(untappdSearchQuery)
+                untappdSearchQuery =
+                    "https://api.untappd.com/v4/search/brewery?" +
+                    untappdSearchQuery;
+
+                return axios.get(untappdSearchQuery);
+            })
             .then(response => {
-                // Filter out results that are not within 25km of the original
-                // Google search location
                 let breweryData = response.data.response.brewery.items.filter(
                     item => {
                         return (
@@ -117,9 +125,9 @@ module.exports.getUntappdBreweryDetails = brewery => {
                 // on Untappd. It could be that the result is a bar or restaurant,
                 // but it may also mean that it is an actual brewery that has a
                 // different spelling on Untappd. So, the name is added to the
-                // correction list.
+                // correction database.
                 if (breweryData.length == 0) {
-                    addBreweryToCorrectionList(brewery);
+                    addBreweryToCorrectionDB(brewery);
                 }
                 // Otherwise, save the brewery data in an object and return it.
                 else {
@@ -136,6 +144,7 @@ module.exports.getUntappdBreweryDetails = brewery => {
                 resolve(brewery);
             })
             .catch(error => {
+                console.error(error);
                 reject(`Unable to get brewery details for ${brewery.name}`);
             });
     });
