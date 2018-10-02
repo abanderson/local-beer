@@ -10,7 +10,6 @@ module.exports = {
             },
             googleName: {
                 type: Sequelize.STRING,
-                // unique: true,
                 allowNull: false
             },
             untappdName: {
@@ -19,7 +18,7 @@ module.exports = {
             address: {
                 type: Sequelize.STRING
             },
-            isBrewery: {
+            isDisplayed: {
                 type: Sequelize.BOOLEAN
             },
             createdAt: {
