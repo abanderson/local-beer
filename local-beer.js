@@ -1,43 +1,43 @@
-const fs = require("fs");
 const querystring = require("querystring");
 const axios = require("axios");
 const models = require("./models");
 
-let breweryNames;
-
-function addBreweryToCorrectionDB(brewery) {
+module.exports.addBreweryToDatabase = brewery => {
     // Search the database to see if there is an entry for the brewery
     // passed to the function. If the brewery is not in the database,
     // add it and log the addition to the console.
-    models.Place.findOrCreate({
-        where: { googleName: brewery.name, address: brewery.address }
-    })
-        .spread((place, created) => {
-            if (created) {
-                console.log(
-                    `Brewery correction database updated with "${brewery.name}"`
-                );
-                // models.Place.update(
-                //     { address: brewery.address },
-                //     { where: { googleName: brewery.name } }
-                // )
-                //     .then(rowsUpdated => {
-                //         console.log(rowsUpdated);
-                //         console.log(
-                //             `Address added to "${brewery.name}" database entry`
-                //         );
-                //     })
-                //     .catch(error => {
-                //         console.error(error);
-                //     });
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
-}
 
-function getBreweryNameFromCorrectionDB(brewery) {
+    return new Promise((resolve, reject) => {
+        models.Place.findOrCreate({
+            where: { googleName: brewery.name, address: brewery.address }
+        })
+            .spread((place, created) => {
+                if (created) {
+                    console.log(
+                        `Brewery database updated with "${brewery.name}"`
+                    );
+                    models.Place.update(
+                        { isDisplayed: true },
+                        {
+                            where: {
+                                googleName: brewery.name,
+                                address: brewery.address
+                            }
+                        }
+                    ).catch(error => {
+                        console.log(error);
+                    });
+                }
+                resolve(brewery);
+            })
+            .catch(error => {
+                console.error(error);
+                reject(error);
+            });
+    });
+};
+
+function getBreweryNameFromDatabase(brewery) {
     // Search the database to see if there is an entry for the brewery
     // passed to the function as well as a corrected name for BeerAdvocate.
     // If there is, log the correction to the console and return the correct name,
@@ -51,7 +51,7 @@ function getBreweryNameFromCorrectionDB(brewery) {
             }
         })
             .then(result => {
-                if (result) {
+                if (result && result.untappdName != brewery.name) {
                     console.log(
                         `Correction found for brewery name: "${
                             brewery.name
@@ -64,33 +64,52 @@ function getBreweryNameFromCorrectionDB(brewery) {
             })
             .catch(error => {
                 console.error(error);
-                reject(
-                    `Error querying correction database for "${brewery.name}"`
-                );
+                reject(`Error querying database for "${brewery.name}"`);
             });
     });
 }
 
-function getDistanceBetweenBreweryCoordinates(lat1, lon1, lat2, lon2) {
-    let deg2rad = deg => deg * (Math.PI / 180);
-
-    let R = 6371; // Radius of the earth in km
-    let dLat = deg2rad(lat2 - lat1);
-    let dLon = deg2rad(lon2 - lon1);
-    let a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) *
-            Math.cos(deg2rad(lat2)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c; // Distance in km
-    return d;
+function addOrUpdateUntappdBreweryInDatabase(brewery) {
+    return new Promise((resolve, reject) => {
+        models.Place.update(
+            { untappdName: brewery.untappdName },
+            { where: { googleName: brewery.name, address: brewery.address } }
+        )
+            .then(() => {
+                resolve(brewery);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
 }
+
+module.exports.filterHiddenBreweries = brewery => {
+    return new Promise((resolve, reject) => {
+        models.Place.findOne({
+            where: {
+                googleName: brewery.name,
+                address: brewery.address,
+                isDisplayed: { $not: false }
+            }
+        })
+            .then(result => {
+                if (result) {
+                    resolve(brewery);
+                } else {
+                    resolve(null);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                reject(`Error filtering brewery: ${brewery.name}`);
+            });
+    });
+};
 
 module.exports.getUntappdBreweryDetails = brewery => {
     return new Promise((resolve, reject) => {
-        getBreweryNameFromCorrectionDB(brewery)
+        getBreweryNameFromDatabase(brewery)
             .then(untappdName => {
                 brewery.untappdName = untappdName;
 
@@ -107,27 +126,15 @@ module.exports.getUntappdBreweryDetails = brewery => {
                 return axios.get(untappdSearchQuery);
             })
             .then(response => {
-                let breweryData = response.data.response.brewery.items.filter(
-                    item => {
-                        return (
-                            getDistanceBetweenBreweryCoordinates(
-                                brewery.latitude,
-                                brewery.longitude,
-                                item.brewery.location.lat,
-                                item.brewery.location.lng
-                            ) < 25
-                        );
-                    }
-                );
+                let breweryData = response.data.response.brewery.items;
 
-                // If no results are left in the brewery list after filtering for
-                // distance, the name returned by Google did not match a brewery
-                // on Untappd. It could be that the result is a bar or restaurant,
-                // but it may also mean that it is an actual brewery that has a
-                // different spelling on Untappd. So, the name is added to the
-                // correction database.
+                // If there are no breweries in the response, the name returned
+                // by Google did not match a brewery on Untappd. It could be that
+                // the result is a bar or restaurant, but it may also mean that
+                // it is an actual brewery that has a different spelling on
+                // Untappd. So, the name is added to the correction database.
                 if (breweryData.length == 0) {
-                    addBreweryToCorrectionDB(brewery);
+                    return brewery;
                 }
                 // Otherwise, save the brewery data in an object and return it.
                 else {
@@ -139,8 +146,11 @@ module.exports.getUntappdBreweryDetails = brewery => {
                     brewery.country = b.country_name;
                     brewery.city = b.location.brewery_city;
                     brewery.state = b.location.brewery_state;
-                }
 
+                    return addOrUpdateUntappdBreweryInDatabase(brewery);
+                }
+            })
+            .then(brewery => {
                 resolve(brewery);
             })
             .catch(error => {
