@@ -11,12 +11,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             googleName: {
                 type: DataTypes.STRING,
-                // unique: true,
                 allowNull: false
             },
             untappdName: { type: DataTypes.STRING },
             address: { type: DataTypes.STRING },
-            isBrewery: { type: DataTypes.BOOLEAN }
+            isDisplayed: { type: DataTypes.BOOLEAN }
         },
         {}
     );
