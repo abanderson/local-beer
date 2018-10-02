@@ -28,11 +28,29 @@ router.get("/search", (req, res, next) => {
                 brewery.longitude = result.geometry.location.lng;
                 return brewery;
             });
-            return breweries;
+
+            return Promise.all(
+                breweries.map(brewery => {
+                    return localBeer.addBreweryToDatabase(brewery);
+                })
+            );
         })
-        // Then, feed the brewery names to the Untappd API to get
-        // information about each brewery
+        // Then, find which breweries in the database are marked to
+        // not be displayed...
         .then(breweries => {
+            return Promise.all(
+                breweries.map(brewery => {
+                    return localBeer.filterHiddenBreweries(brewery);
+                })
+            );
+        })
+        // ...and filter them out. Then, feed the brewery names to
+        // the Untappd API to get information about each brewery
+        .then(breweries => {
+            breweries = breweries.filter(brewery => {
+                return brewery != null;
+            });
+
             return Promise.all(
                 breweries.map(brewery => {
                     return localBeer.getUntappdBreweryDetails(brewery);
