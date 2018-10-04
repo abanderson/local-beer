@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactGA from "react-ga";
 
 class Filter extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ class Filter extends Component {
                 "filter-controls-close"
             );
             this.setState({ controlsOpen: false });
+            document.getElementsByClassName("filter-input-field")[0].blur();
         } else if (
             filterContainer.classList.contains("filter-container-close")
         ) {
@@ -41,11 +43,22 @@ class Filter extends Component {
                 "filter-controls-open"
             );
             this.setState({ controlsOpen: true });
+            document.getElementsByClassName("filter-input-field")[0].focus();
+            this.logAnalyticsFilterEvent();
         } else {
             filterContainer.classList.add("filter-container-open");
             filterControls.classList.add("filter-controls-open");
             this.setState({ controlsOpen: true });
+            document.getElementsByClassName("filter-input-field")[0].focus();
+            this.logAnalyticsFilterEvent();
         }
+    }
+
+    logAnalyticsFilterEvent() {
+        ReactGA.event({
+            category: "Filter",
+            action: "Filtered results"
+        });
     }
 
     onInputChange(searchTerm) {
