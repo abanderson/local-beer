@@ -19,6 +19,7 @@
 }
 
 .beer-card {
+    min-width: 300px;
     max-width: 360px;
 }
 
@@ -178,6 +179,10 @@
 }
 
 @media screen and (max-width: 767px) {
+    .beer-card {
+        min-width: 555px;
+    }
+
     .card-columns {
         column-count: 1;
     }
@@ -188,6 +193,36 @@
 }
 
 @media screen and (max-width: 575px) {
+    .beer-card {
+        min-width: 430px;
+    }
+
+    .card-columns {
+        margin-right: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .beer-card {
+        min-width: 380px;
+        max-width: 360px;
+    }
+
+    .brewery-logo {
+        margin-bottom: 1rem;
+    }
+
+    .brewery-address {
+        clear: both;
+        /*margin-top: 2rem;*/
+        text-align: center;
+    }
+
+    .brewery-name {
+        margin-bottom: 1rem;
+    }
+
     .card-columns {
         margin-right: 1rem;
         margin-left: 1rem;
@@ -195,25 +230,45 @@
 }
 
 @media screen and (max-width: 400px) {
+    .beer-card {
+        min-width: 340px;
+        max-width: 360px;
+    }
+
     .brewery-logo {
         max-width: 75px;
+        margin-bottom: 1rem;
     }
 
     .brewery-address {
         clear: both;
-        margin-top: 2rem;
+        /*margin-top: 2rem;*/
         text-align: center;
+    }
+
+    .brewery-name {
+        margin-bottom: 1rem;
     }
 }
 
 @media screen and (max-width: 374px) {
+    .beer-card {
+        min-width: 285px;
+        max-width: 360px;
+    }
+
     .brewery-logo {
         max-width: 75px;
+        margin-bottom: 1rem;
     }
 
     .brewery-address {
         clear: both;
-        margin-top: 2rem;
+        /*margin-top: 2rem;*/
         text-align: center;
+    }
+
+    .brewery-name {
+        margin-bottom: 1rem;
     }
 }
