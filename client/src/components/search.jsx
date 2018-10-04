@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactGA from "react-ga";
 
 class Search extends Component {
     constructor(props) {
@@ -16,6 +17,11 @@ class Search extends Component {
         document.getElementsByClassName("form-control")[0].blur(); // Remove focus from the search field (hides keyboard on iOS)
         this.props.onSearchSubmit(this.state.searchTerm);
         this.setState({ searchTerm: "" });
+        ReactGA.event({
+            category: "Search",
+            action: "Searched for a location",
+            label: "Text search"
+        });
     }
 
     handleLocationButtonClick() {
@@ -28,6 +34,11 @@ class Search extends Component {
                 this.state.latitude,
                 this.state.longitude
             );
+        });
+        ReactGA.event({
+            category: "Search",
+            action: "Searched for a location",
+            label: "Coordinate search"
         });
     }
 
