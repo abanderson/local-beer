@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
+import ReactGA from "react-ga";
 import "./App.css";
 import Navbar from "./components/navbar";
 import Search from "./components/search";
@@ -20,6 +21,8 @@ class App extends Component {
             loading: false,
             status: null
         };
+
+        this.initGoogleAnayltics();
     }
 
     beerSearch(searchTerm) {
@@ -28,6 +31,11 @@ class App extends Component {
             displayedBreweries: [],
             loading: true,
             status: null
+        });
+        ReactGA.event({
+            category: "Search",
+            action: "Searched for a location",
+            value: searchTerm
         });
         let formattedSearchTerm = searchTerm.toLowerCase().trim();
         Axios.get(`/api/search?q=${formattedSearchTerm}`)
@@ -90,6 +98,12 @@ class App extends Component {
         });
 
         this.setState({ displayedBreweries: filteredResults });
+    }
+
+    initGoogleAnayltics() {
+        console.log("Initialized");
+        ReactGA.initialize("UA-126991946-1");
+        ReactGA.pageview(window.location.pathname + window.location.search);
     }
 
     locationSearch(latitude, longitude) {
