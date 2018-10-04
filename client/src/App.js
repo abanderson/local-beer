@@ -32,11 +32,10 @@ class App extends Component {
             loading: true,
             status: null
         });
-        ReactGA.event({
-            category: "Search",
-            action: "Searched for a location",
-            value: searchTerm
-        });
+        // ReactGA.event({
+        //     category: "Search",
+        //     action: "Searched for a location",
+        // });
         let formattedSearchTerm = searchTerm.toLowerCase().trim();
         Axios.get(`/api/search?q=${formattedSearchTerm}`)
             .then(response => {
@@ -101,7 +100,6 @@ class App extends Component {
     }
 
     initGoogleAnayltics() {
-        console.log("Initialized");
         ReactGA.initialize("UA-126991946-1");
         ReactGA.pageview(window.location.pathname + window.location.search);
     }
