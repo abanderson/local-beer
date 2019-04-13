@@ -1,6 +1,9 @@
 const querystring = require("querystring");
 const axios = require("axios");
+const Sequelize = require("sequelize");
 const models = require("./models");
+
+const Op = Sequelize.Op;
 
 module.exports.addBreweryToDatabase = brewery => {
     // Search the database to see if there is an entry for the brewery
@@ -46,7 +49,8 @@ function getBreweryNameFromDatabase(brewery) {
         models.Place.findOne({
             where: {
                 googleName: brewery.name,
-                untappdName: { $ne: null },
+                // untappdName: { $ne: null },
+                untappdName: { [Op.ne]: null },
                 address: brewery.address
             }
         })
@@ -90,7 +94,8 @@ module.exports.filterHiddenBreweries = brewery => {
             where: {
                 googleName: brewery.name,
                 address: brewery.address,
-                isDisplayed: { $not: false }
+                isDisplayed: { [Op.not]: false }
+                // isDisplayed: { $not: false }
             }
         })
             .then(result => {
