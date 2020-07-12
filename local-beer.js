@@ -5,16 +5,17 @@ const models = require("./models");
 
 const Op = Sequelize.Op;
 
-module.exports.addBreweryToDatabase = brewery => {
+module.exports.addBreweryToDatabase = (brewery) => {
     // Search the database to see if there is an entry for the brewery
     // passed to the function. If the brewery is not in the database,
     // add it and log the addition to the console.
 
     return new Promise((resolve, reject) => {
         models.Place.findOrCreate({
-            where: { googleName: brewery.name, address: brewery.address }
+            where: { googleName: brewery.name, address: brewery.address },
         })
-            .spread((place, created) => {
+            // .spread((place, created) => {
+            .then((place, created) => {
                 if (created) {
                     console.log(
                         `Brewery database updated with "${brewery.name}"`
@@ -24,16 +25,16 @@ module.exports.addBreweryToDatabase = brewery => {
                         {
                             where: {
                                 googleName: brewery.name,
-                                address: brewery.address
-                            }
+                                address: brewery.address,
+                            },
                         }
-                    ).catch(error => {
+                    ).catch((error) => {
                         console.log(error);
                     });
                 }
                 resolve(brewery);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
                 reject(error);
             });
@@ -51,22 +52,20 @@ function getBreweryNameFromDatabase(brewery) {
                 googleName: brewery.name,
                 // untappdName: { $ne: null },
                 untappdName: { [Op.ne]: null },
-                address: brewery.address
-            }
+                address: brewery.address,
+            },
         })
-            .then(result => {
+            .then((result) => {
                 if (result && result.untappdName != brewery.name) {
                     console.log(
-                        `Correction found for brewery name: "${
-                            brewery.name
-                        }" --> "${result.untappdName}"`
+                        `Correction found for brewery name: "${brewery.name}" --> "${result.untappdName}"`
                     );
                     resolve(result.untappdName);
                 } else {
                     resolve(brewery.name);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
                 reject(`Error querying database for "${brewery.name}"`);
             });
@@ -82,46 +81,46 @@ function addOrUpdateUntappdBreweryInDatabase(brewery) {
             .then(() => {
                 resolve(brewery);
             })
-            .catch(error => {
+            .catch((error) => {
                 reject(error);
             });
     });
 }
 
-module.exports.filterHiddenBreweries = brewery => {
+module.exports.filterHiddenBreweries = (brewery) => {
     return new Promise((resolve, reject) => {
         models.Place.findOne({
             where: {
                 googleName: brewery.name,
                 address: brewery.address,
-                isDisplayed: { [Op.not]: false }
+                isDisplayed: { [Op.not]: false },
                 // isDisplayed: { $not: false }
-            }
+            },
         })
-            .then(result => {
+            .then((result) => {
                 if (result) {
                     resolve(brewery);
                 } else {
                     resolve(null);
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
                 reject(`Error filtering brewery: ${brewery.name}`);
             });
     });
 };
 
-module.exports.getUntappdBreweryDetails = brewery => {
+module.exports.getUntappdBreweryDetails = (brewery) => {
     return new Promise((resolve, reject) => {
         getBreweryNameFromDatabase(brewery)
-            .then(untappdName => {
+            .then((untappdName) => {
                 brewery.untappdName = untappdName;
 
                 let untappdSearchQuery = querystring.stringify({
                     q: untappdName,
                     client_id: process.env.UNTAPPD_CLIENT_ID,
-                    client_secret: process.env.UNTAPPD_CLIENT_SECRET
+                    client_secret: process.env.UNTAPPD_CLIENT_SECRET,
                 });
 
                 untappdSearchQuery =
@@ -130,7 +129,7 @@ module.exports.getUntappdBreweryDetails = brewery => {
 
                 return axios.get(untappdSearchQuery);
             })
-            .then(response => {
+            .then((response) => {
                 let breweryData = response.data.response.brewery.items;
 
                 // If there are no breweries in the response, the name returned
@@ -155,31 +154,29 @@ module.exports.getUntappdBreweryDetails = brewery => {
                     return addOrUpdateUntappdBreweryInDatabase(brewery);
                 }
             })
-            .then(brewery => {
+            .then((brewery) => {
                 resolve(brewery);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(error);
                 reject(`Unable to get brewery details for ${brewery.name}`);
             });
     });
 };
 
-module.exports.getBeersForBrewery = brewery => {
+module.exports.getBeersForBrewery = (brewery) => {
     let untappdSearchQuery = querystring.stringify({
         client_id: process.env.UNTAPPD_CLIENT_ID,
-        client_secret: process.env.UNTAPPD_CLIENT_SECRET
+        client_secret: process.env.UNTAPPD_CLIENT_SECRET,
     });
-    untappdSearchQuery = `https://api.untappd.com/v4/brewery/info/${
-        brewery.untappd_id
-    }?${untappdSearchQuery}`;
+    untappdSearchQuery = `https://api.untappd.com/v4/brewery/info/${brewery.untappd_id}?${untappdSearchQuery}`;
 
     return new Promise((resolve, reject) => {
         axios
             .get(untappdSearchQuery)
-            .then(response => {
+            .then((response) => {
                 brewery.beers = response.data.response.brewery.beer_list.items.map(
-                    item => {
+                    (item) => {
                         return {
                             beer_name: item.beer.beer_name,
                             beer_style: item.beer.beer_style,
@@ -188,20 +185,18 @@ module.exports.getBeersForBrewery = brewery => {
                             beer_label: item.beer.beer_label,
                             beer_description: item.beer.beer_description,
                             untappd_beer_id: item.beer.bid,
-                            untappd_beer_url: `https://untappd.com/b/${
-                                item.beer.beer_slug
-                            }/${item.beer.bid}`,
+                            untappd_beer_url: `https://untappd.com/b/${item.beer.beer_slug}/${item.beer.bid}`,
                             untappd_rating: item.beer.rating_score,
                             untappd_rating_count: item.beer.rating_count,
                             is_in_production: item.beer.is_in_production,
                             brewery: brewery.name,
-                            brewery_address: brewery.address
+                            brewery_address: brewery.address,
                         };
                     }
                 );
                 resolve(brewery);
             })
-            .catch(error => {
+            .catch((error) => {
                 reject(error);
             });
     });
